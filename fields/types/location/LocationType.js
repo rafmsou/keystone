@@ -218,7 +218,7 @@ location.prototype.updateItem = function (item, data, callback) {
 	var valueKeys = fieldKeys.concat(geoKeys);
 	var valuePaths = valueKeys;
 	var values = this._path.get(data);
-
+	
 	if (!values) {
 		// Handle flattened values
 		valuePaths = valueKeys.map(function (i) {
@@ -226,6 +226,9 @@ location.prototype.updateItem = function (item, data, callback) {
 		});
 		values = _.pick(data, valuePaths);
 	}
+
+	console.log('data[location_improve]', data['location_improve']);
+	console.log('data[location_improve_overwrite]', data['location_improve_overwrite']);
 
 	// convert valuePaths to a map for easier usage
 	valuePaths = _.zipObject(valueKeys, valuePaths);
@@ -238,26 +241,9 @@ location.prototype.updateItem = function (item, data, callback) {
 
 	_.forEach(fieldKeys, setValue);
 
-	if (valuePaths.geo in values) {
-		var oldGeo = item.get(paths.geo) || [];
-		if (oldGeo.length > 1) {
-			oldGeo[0] = item.get(paths.geo)[1];
-			oldGeo[1] = item.get(paths.geo)[0];
-		}
-		var newGeo = values[valuePaths.geo];
-		if (!Array.isArray(newGeo) || newGeo.length !== 2) {
-			newGeo = [];
-		}
-		if (newGeo[0] !== oldGeo[0] || newGeo[1] !== oldGeo[1]) {
-			item.set(paths.geo, newGeo);
-		}
-	} else if (valuePaths.geo_lat in values && valuePaths.geo_lng in values) {
-		var lat = utils.number(values[valuePaths.geo_lat]);
-		var lng = utils.number(values[valuePaths.geo_lng]);
-		item.set(paths.geo, (lat && lng) ? [lng, lat] : undefined);
-	}
-
-	process.nextTick(callback);
+	this.googleLookup(item, null, 'overwrite', function() {
+		process.nextTick(callback);
+	});
 };
 
 /**
@@ -371,7 +357,7 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 	var field = this;
 	var stored = item.get(this.path);
 	var address = item.get(this.paths.serialised);
-
+	
 	if (address.length === 0) {
 		return callback({
 			status_code: 500,
@@ -381,7 +367,7 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 	}
 
 	doGoogleGeocodeRequest(address, region || keystone.get('default region'), function (err, geocode) {
-
+		
 		if (err || geocode.status !== 'OK') {
 			return callback(err || new Error(geocode.status + ': ' + geocode.error_message));
 		}

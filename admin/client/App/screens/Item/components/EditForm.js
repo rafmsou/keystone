@@ -155,7 +155,7 @@ var EditForm = React.createClass({
 				this.setState({
 					alerts: {
 						success: {
-							success: 'Your changes have been saved successfully',
+							success: 'Alterações salvas com sucesso.',
 						},
 					},
 					lastValues: this.state.values,
@@ -267,6 +267,7 @@ var EditForm = React.createClass({
 				}
 				props.key = field.path;
 				if (index === 0 && this.state.focusFirstField) {
+					console.log(`FOCUS ${field.path}`);
 					props.autoFocus = true;
 				}
 				return React.createElement(Fields[field.type], props);
@@ -275,7 +276,7 @@ var EditForm = React.createClass({
 	},
 	renderFooterBar () {
 		const { loading } = this.state;
-		const loadingButtonText = loading ? 'Saving' : 'Save';
+		const loadingButtonText = loading ? 'Salvando' : 'Salvar';
 
 		// Padding must be applied inline so the FooterBar can determine its
 		// innerHeight at runtime. Aphrodite's styling comes later...
@@ -294,15 +295,15 @@ var EditForm = React.createClass({
 					</LoadingButton>
 					<Button disabled={loading} onClick={this.confirmReset} variant="link" color="cancel" data-button="reset">
 						<ResponsiveText
-							hiddenXS="reset changes"
-							visibleXS="reset"
+							hiddenXS="descartar alterações"
+							visibleXS="descartar"
 						/>
 					</Button>
 					{!this.props.list.nodelete && (
 						<Button disabled={loading} onClick={this.confirmDelete} variant="link" color="delete" style={styles.deleteButton} data-button="delete">
 							<ResponsiveText
-								hiddenXS={`delete ${this.props.list.singular.toLowerCase()}`}
-								visibleXS="delete"
+								hiddenXS={`excluir ${this.props.list.singular.toLowerCase()}`}
+								visibleXS="excluir"
 							/>
 						</Button>
 					)}

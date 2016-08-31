@@ -97,7 +97,7 @@ module.exports = Field.create({
 	},
 
 	renderValue () {
-		return <FormInput noedit>{this.formatValue() || '(no value)'}</FormInput>;
+		return <FormInput noedit>{this.formatValue() || '(sem valor)'}</FormInput>;
 	},
 
 	renderField (fieldPath, label, collapse, autoFocus) {
@@ -115,13 +115,13 @@ module.exports = Field.create({
 	renderSuburbState () {
 		const { value = {}, path } = this.props;
 		return (
-			<NestedFormField label="Suburb / State" data-field-location-path={path + '.suburb_state'}>
+			<NestedFormField label="Cidade / Estado" data-field-location-path={path + '.suburb_state'}>
 				<FormRow>
 					<FormField width="two-thirds" data-field-location-path={path + '.suburb'}>
-						<FormInput name={this.getInputName(path + '.suburb')} value={value.suburb} onChange={this.makeChanger('suburb')} placeholder="Suburb" />
+						<FormInput name={this.getInputName(path + '.suburb')} value={value.suburb} onChange={this.makeChanger('suburb')} placeholder="Cidade" />
 					</FormField>
 					<FormField width="one-third" data-field-location-path={path + '.state'}>
-						<FormInput name={this.getInputName(path + '.state')} value={value.state} onChange={this.makeChanger('state')} placeholder="State" />
+						<FormInput name={this.getInputName(path + '.state')} value={value.state} onChange={this.makeChanger('state')} placeholder="Estado" />
 					</FormField>
 				</FormRow>
 			</NestedFormField>
@@ -131,13 +131,13 @@ module.exports = Field.create({
 	renderPostcodeCountry () {
 		const { value = {}, path } = this.props;
 		return (
-			<NestedFormField label="Postcode / Country" data-field-location-path={path + '.postcode_country'}>
+			<NestedFormField label="CEP / País" data-field-location-path={path + '.postcode_country'}>
 				<FormRow>
 					<FormField width="one-third" data-field-location-path={path + '.postcode'}>
-						<FormInput name={this.getInputName(path + '.postcode')} value={value.postcode} onChange={this.makeChanger('postcode')} placeholder="Post Code" />
+						<FormInput name={this.getInputName(path + '.postcode')} value={value.postcode} onChange={this.makeChanger('postcode')} placeholder="CEP" />
 					</FormField>
 					<FormField width="two-thirds" data-field-location-path={path + '.country'}>
-						<FormInput name={this.getInputName(path + '.country')} value={value.country} onChange={this.makeChanger('country')} placeholder="Country" />
+						<FormInput name={this.getInputName(path + '.country')} value={value.country} onChange={this.makeChanger('country')} placeholder="País" />
 					</FormField>
 				</FormRow>
 			</NestedFormField>
@@ -180,7 +180,7 @@ module.exports = Field.create({
 		if (!enableMapsAPI) return null;
 		var replace = this.state.improve ? (
 			<Checkbox
-				label="Replace existing data"
+				label="Substituir dados existentes"
 				name={this.getInputName(paths.overwrite)}
 				onChange={this.makeGoogler('overwrite')}
 				checked={this.state.overwrite} />
@@ -188,11 +188,11 @@ module.exports = Field.create({
 		return (
 			<FormField offsetAbsentLabel>
 				<Checkbox
-					label="Autodetect and improve location on save"
+					label="Auto-detectar e melhorar localização ao salvar"
 					name={this.getInputName(paths.improve)}
 					onChange={this.makeGoogler('improve')}
 					checked={this.state.improve}
-					title="When checked, this will attempt to fill missing fields. It will also get the lat/long" />
+					title="Quando marcado, isso fará com que os campos vazios sejam preenchidos automaticamente." />
 				{replace}
 			</FormField>
 		);
@@ -218,7 +218,7 @@ module.exports = Field.create({
 
 		/* eslint-disable no-script-url */
 		var showMore = !_.isEmpty(this.state.collapsedFields)
-			? <CollapsedFieldLabel onClick={this.uncollapseFields}>(show more fields)</CollapsedFieldLabel>
+			? <CollapsedFieldLabel onClick={this.uncollapseFields}>(mostrar mais campos)</CollapsedFieldLabel>
 			: null;
 		/* eslint-enable */
 
@@ -229,9 +229,9 @@ module.exports = Field.create({
 					{showMore}
 				</FormField>
 				{this.renderField('number', 'PO Box / Shop', true, true)}
-				{this.renderField('name', 'Building Name', true)}
-				{this.renderField('street1', 'Street Address')}
-				{this.renderField('street2', 'Street Address 2', true)}
+				{this.renderField('name', 'Nome do imóvel', true)}
+				{this.renderField('street1', 'Endereço')}
+				{this.renderField('street2', 'Complemento', true)}
 				{this.renderSuburbState()}
 				{this.renderPostcodeCountry()}
 				{this.renderGeo()}

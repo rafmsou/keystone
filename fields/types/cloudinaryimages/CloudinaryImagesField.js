@@ -274,7 +274,7 @@ module.exports = Field.create({
 		return (
 			<div style={toolbarStyles}>
 				<Button onClick={this.triggerFileBrowser} style={uploadButtonStyles} data-e2e-upload-button="true">
-					Upload Images
+					Escolher Imagens
 				</Button>
 				{this.hasFiles() && (
 					<Button variant="link" color="cancel" onClick={this.clearFiles}>
