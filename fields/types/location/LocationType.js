@@ -227,9 +227,6 @@ location.prototype.updateItem = function (item, data, callback) {
 		values = _.pick(data, valuePaths);
 	}
 
-	console.log('data[location_improve]', data['location_improve']);
-	console.log('data[location_improve_overwrite]', data['location_improve_overwrite']);
-
 	// convert valuePaths to a map for easier usage
 	valuePaths = _.zipObject(valueKeys, valuePaths);
 
@@ -241,37 +238,37 @@ location.prototype.updateItem = function (item, data, callback) {
 
 	_.forEach(fieldKeys, setValue);
 
-	this.googleLookup(item, null, 'overwrite', function() {
-		process.nextTick(callback);
-	});
-};
-
-/**
- * Returns a callback that handles a standard form submission for the field
- *
- * Handles:
- * - `field.paths.improve` in `req.body` - improves data via `.googleLookup()`
- * - `field.paths.overwrite` in `req.body` - in conjunction with `improve`, overwrites existing data
- */
-location.prototype.getRequestHandler = function (item, req, paths, callback) {
-	var field = this;
-	if (utils.isFunction(paths)) {
-		callback = paths;
-		paths = field.paths;
-	} else if (!paths) {
-		paths = field.paths;
-	}
-	callback = callback || function () {};
-	return function () {
-		var update = req.body[paths.overwrite] ? 'overwrite' : true;
-		if (req.body && req.body[paths.improve]) {
-			field.googleLookup(item, false, update, function () {
-				callback();
-			});
-		} else {
-			callback();
+	if (valuePaths.geo in values) {
+		var oldGeo = item.get(paths.geo) || [];
+		if (oldGeo.length > 1) {
+			oldGeo[0] = item.get(paths.geo)[1];
+			oldGeo[1] = item.get(paths.geo)[0];
 		}
-	};
+		var newGeo = values[valuePaths.geo];
+		if (!Array.isArray(newGeo) || newGeo.length !== 2) {
+			newGeo = [];
+		}
+		if (newGeo[0] !== oldGeo[0] || newGeo[1] !== oldGeo[1]) {
+			item.set(paths.geo, newGeo);
+		}
+	} else if (valuePaths.geo_lat in values && valuePaths.geo_lng in values) {
+		var lat = utils.number(values[valuePaths.geo_lat]);
+		var lng = utils.number(values[valuePaths.geo_lng]);
+		item.set(paths.geo, (lat && lng) ? [lng, lat] : undefined);
+	}
+
+	var doGoogleLookup = this.getValueFromData(data, '_improve');
+	if (doGoogleLookup) {
+		var googleUpdateMode = this.getValueFromData(data, '_improve_overwrite') ? 'overwrite' : true;
+		this.googleLookup(item, false, googleUpdateMode, function (err, location, result) {
+			// TODO: we are currently discarding the error; it should probably be
+			// sent back in the response, needs consideration
+			callback();
+		});
+		return;
+	}
+
+	process.nextTick(callback);
 };
 
 /**
@@ -290,7 +287,7 @@ function doGoogleGeocodeRequest (address, region, callback) {
 		address: address,
 	};
 
-	if (arguments.length === 2 && _.isFunction(region)) {
+	if (arguments.length === 2 && typeof region === 'function') {
 		callback = region;
 		region = null;
 	}
@@ -342,7 +339,7 @@ function doGoogleGeocodeRequest (address, region, callback) {
  */
 location.prototype.googleLookup = function (item, region, update, callback) {
 
-	if (_.isFunction(update)) {
+	if (typeof update === 'function') {
 		callback = update;
 		update = false;
 	}
@@ -375,8 +372,7 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 
 		_.forEach(result.address_components, function (val) {
 			if (_.indexOf(val.types, 'street_number') >= 0) {
-				location.street1 = location.street1 || [];
-				location.street1.push(val.long_name);
+				location.street1 = [val.long_name];
 			}
 			if (_.indexOf(val.types, 'route') >= 0) {
 				location.street1 = location.street1 || [];
