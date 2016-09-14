@@ -8,7 +8,7 @@ import { Button, InputGroup, FormInput } from 'elemental';
 TODO: Implement yearRange Prop, or deprecate for max / min values (better)
 */
 
-const DEFAULT_INPUT_FORMAT = 'YYYY-MM-DD';
+const DEFAULT_INPUT_FORMAT = 'DD-MM-YYYY';
 const DEFAULT_FORMAT_STRING = 'Do MMM YYYY';
 
 module.exports = Field.create({

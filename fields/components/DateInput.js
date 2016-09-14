@@ -5,6 +5,10 @@ import { findDOMNode } from 'react-dom';
 import Popout from '../../admin/client/App/shared/Popout';
 import { FormInput } from 'elemental';
 
+import MomentLocaleUtils from 'react-day-picker/moment';
+import setMomentBrLocale from '../utils/setMomentBrLocale';
+setMomentBrLocale(moment);
+
 let lastId = 0;
 
 module.exports = React.createClass({
@@ -18,7 +22,7 @@ module.exports = React.createClass({
 	},
 	getDefaultProps () {
 		return {
-			format: 'YYYY-MM-DD',
+			format: 'DD-MM-YYYY',
 		};
 	},
 	getInitialState () {
@@ -137,6 +141,8 @@ module.exports = React.createClass({
 						onDayClick={this.handleDaySelect}
 						ref="picker"
 						tabIndex={-1}
+						locale="pt-br"
+						localeUtils={MomentLocaleUtils}
 					/>
 				</Popout>
 			</div>

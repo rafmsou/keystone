@@ -14,12 +14,12 @@ module.exports = Field.create({
 	focusTargetRef: 'dateInput',
 
 	// default input formats
-	dateInputFormat: 'YYYY-MM-DD',
+	dateInputFormat: 'DD-MM-YYYY',
 	timeInputFormat: 'h:mm:ss a',
 	tzOffsetInputFormat: 'Z',
 
 	// parse formats (duplicated from lib/fieldTypes/datetime.js)
-	parseFormats: ['YYYY-MM-DD', 'YYYY-MM-DD h:m:s a', 'YYYY-MM-DD h:m a', 'YYYY-MM-DD H:m:s', 'YYYY-MM-DD H:m'],
+	parseFormats: ['DD-MM-YYYY', 'DD-MM-YYYY h:m:s a', 'DD-MM-YYYY h:m a', 'DD-MM-YYYY H:m:s', 'DD-MM-YYYY H:m'],
 
 	getInitialState () {
 		return {

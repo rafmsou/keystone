@@ -218,7 +218,7 @@ location.prototype.updateItem = function (item, data, callback) {
 	var valueKeys = fieldKeys.concat(geoKeys);
 	var valuePaths = valueKeys;
 	var values = this._path.get(data);
-	
+
 	if (!values) {
 		// Handle flattened values
 		valuePaths = valueKeys.map(function (i) {
@@ -347,7 +347,7 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 	var field = this;
 	var stored = item.get(this.path);
 	var address = item.get(this.paths.serialised);
-	
+
 	if (address.length === 0) {
 		return callback({
 			status_code: 500,
@@ -357,7 +357,7 @@ location.prototype.googleLookup = function (item, region, update, callback) {
 	}
 
 	doGoogleGeocodeRequest(address, region || keystone.get('default region'), function (err, geocode) {
-		
+
 		if (err || geocode.status !== 'OK') {
 			return callback(err || new Error(geocode.status + ': ' + geocode.error_message));
 		}

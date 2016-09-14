@@ -15,7 +15,7 @@ function datearray (list, path, options) {
 	this._defaultSize = 'medium';
 	this._underscoreMethods = ['format'];
 	this._properties = ['formatString'];
-	this.parseFormatString = options.parseFormat || 'YYYY-MM-DD';
+	this.parseFormatString = options.parseFormat || 'DD-MM-YYYY';
 	this.formatString = (options.format === false) ? false : (options.format || 'Do MMM YYYY');
 	if (this.formatString && typeof this.formatString !== 'string') {
 		throw new Error('FieldType.DateArray: options.format must be a string.');
