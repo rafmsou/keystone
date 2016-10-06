@@ -1,23 +1,29 @@
+var ModelTestConfig = require('../../../modelTestConfig/UserModelTestConfig');
+
 module.exports = {
 	before: function (browser) {
 		browser.adminUIApp = browser.page.adminUIApp();
-		browser.adminUISignin = browser.page.adminUISignin();
+		browser.adminUISigninScreen = browser.page.adminUISignin();
 		browser.adminUIListScreen = browser.page.adminUIListScreen();
 		browser.adminUIItemScreen = browser.page.adminUIItemScreen();
 		browser.adminUIInitialFormScreen = browser.page.adminUIInitialForm();
 		browser.adminUIDeleteConfirmation = browser.page.adminUIDeleteConfirmation();
 
-		browser.adminUIApp.gotoHomeScreen();
+		browser.adminUIListScreen.setDefaultModelTestConfig(ModelTestConfig);
+
+		browser.adminUIApp.gotoSigninScreen();
+
 		browser.adminUIApp.waitForSigninScreen();
 
-		browser.adminUISignin.signin();
+		browser.adminUISigninScreen.signin();
 
-		browser.adminUIApp
-			.waitForHomeScreen()
-			.click('@accessMenu')
-			.waitForListScreen();
+		browser.adminUIApp.waitForHomeScreen();
 
-		browser.adminUIListScreen.click('@secondItemLink');
+		browser.adminUIApp.openList({section: 'access', list: 'User'});
+
+		browser.adminUIListScreen.clickItemFieldValue([
+			{ row: 2, column: 2, name: 'name',}
+		]);
 
 		browser.adminUIApp.waitForItemScreen();
 	},
