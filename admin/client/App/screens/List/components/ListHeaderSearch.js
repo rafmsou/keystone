@@ -19,7 +19,7 @@ function ListHeaderSearch ({
 				data-search-input-field
 				onChange={handleChange}
 				onKeyUp={handleKeyup}
-				placeholder="Search"
+				placeholder="Busca"
 				focusInput={focusInput}
 				value={value}
 			/>

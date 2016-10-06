@@ -123,11 +123,11 @@ var ListDownloadForm = React.createClass({
 		});
 
 		const allColumnsSelected = this.allColumnsSelected();
-		const checkboxLabel = allColumnsSelected ? 'None' : 'All';
+		const checkboxLabel = allColumnsSelected ? 'Nenhuma' : 'Todas';
 
 		return (
 			<div>
-				<FormField label="Quick select:">
+				<FormField label="Seleção rápida:">
 					<Checkbox onChange={this.clickSelectAll} value label={checkboxLabel} checked={allColumnsSelected} />
 				</FormField>
 				<div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', marginTop: '1em', paddingTop: '1em' }}>
@@ -145,27 +145,27 @@ var ListDownloadForm = React.createClass({
 					active={this.state.isOpen}
 					id="listHeaderDownloadButton"
 					glyph="cloud-download"
-					label="Download"
+					label="Baixar"
 					onClick={() => this.togglePopout(!this.state.isOpen)}
 				/>
 				<Popout isOpen={this.state.isOpen} onCancel={() => this.togglePopout(false)} relativeToID="listHeaderDownloadButton">
-					<Popout.Header title="Download" />
+					<Popout.Header title="Baixar" />
 					<Popout.Body scrollable>
 						<Form type="horizontal" component="div">
-							<FormField label="File format:">
+							<FormField label="Formato do arquivo:">
 								<SegmentedControl equalWidthSegments options={FORMAT_OPTIONS} value={this.state.format} onChange={this.changeFormat} />
 							</FormField>
-							<FormField label="Columns:">
-								<Checkbox autoFocus label="Use currently selected" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
+							<FormField label="Colunas:">
+								<Checkbox autoFocus label="Utilizar selecionadas" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
 							</FormField>
 							{this.renderColumnSelect()}
 						</Form>
 					</Popout.Body>
 					<Popout.Footer
 						primaryButtonAction={this.handleDownloadRequest}
-						primaryButtonLabel="Download"
+						primaryButtonLabel="Baixar"
 						secondaryButtonAction={() => this.togglePopout(false)}
-						secondaryButtonLabel="Cancel" />
+						secondaryButtonLabel="Cancelar" />
 				</Popout>
 			</div>
 		);

@@ -111,7 +111,7 @@ export const EditFormHeader = React.createClass({
 						value={this.state.searchString}
 						onChange={this.searchStringChanged}
 						onKeyUp={this.handleEscapeKey}
-						placeholder="Search"
+						placeholder="Busca"
 						className="EditForm__header__search-input" />
 				</FormIconField>
 			</form>

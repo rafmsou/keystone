@@ -33,13 +33,13 @@ function CreateButton ({ listName, onClick, ...props }) {
 			glyph="plus"
 			onClick={onClick}
 			position="left"
-			title={`Create ${listName}`}
+			title={`Criar ${listName}`}
 			{...props}
 		>
 			<ResponsiveText
-				visibleSM="Create"
-				visibleMD="Create"
-				visibleLG={`Create ${listName}`}
+				visibleSM="Criar"
+				visibleMD="Criar"
+				visibleLG={`Criar ${listName}`}
 			/>
 		</GlyphButton>
 	);

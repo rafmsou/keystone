@@ -53,13 +53,13 @@ function ListManagement ({
 			<Group contiguous>
 				{selectAllButton}
 				<Section>
-					<Button active={allVisibleButtonIsActive} onClick={() => handleSelect('visible')} title="Select all rows">
-						{itemCount > itemsPerPage ? 'All Visible ' : 'All '}
+					<Button active={allVisibleButtonIsActive} onClick={() => handleSelect('visible')} title="Selecionar tudo">
+						{itemCount > itemsPerPage ? 'Todos Visíveis ' : 'Todos '}
 						<small style={buttonNoteStyles}>({itemCount > itemsPerPage ? itemsPerPage : itemCount})</small>
 					</Button>
 				</Section>
 				<Section>
-					<Button active={noneButtonIsActive} onClick={() => handleSelect('none')} title="Deselect all rows">None</Button>
+					<Button active={noneButtonIsActive} onClick={() => handleSelect('none')} title="Desmarcar todos">Nenhum</Button>
 				</Section>
 			</Group>
 		</Section>
@@ -80,7 +80,7 @@ function ListManagement ({
 			<Group style={{ float: 'left', marginRight: '.75em', marginBottom: 0 }}>
 				<Section>
 					<Button active={isOpen} onClick={() => handleToggle(!isOpen)}>
-						Manage
+						Gerenciar
 					</Button>
 				</Section>
 				{selectButtons}
