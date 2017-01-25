@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import assign from 'object-assign';
 import Popout from '../../../shared/Popout';
 import PopoutList from '../../../shared/Popout/PopoutList';
-import { Checkbox, Form, FormField, SegmentedControl } from 'elemental';
 import ListHeaderButton from './ListHeaderButton';
+import { LabelledControl, Form, FormField, SegmentedControl } from '../../../elemental';
 
 import { downloadItems } from '../actions';
 const FORMAT_OPTIONS = [
@@ -127,8 +127,14 @@ var ListDownloadForm = React.createClass({
 
 		return (
 			<div>
-				<FormField label="Seleção rápida:">
-					<Checkbox onChange={this.clickSelectAll} value label={checkboxLabel} checked={allColumnsSelected} />
+				<FormField offsetAbsentLabel>
+					<LabelledControl
+						checked={allColumnsSelected}
+						label={checkboxLabel}
+						onChange={this.clickSelectAll}
+						type="checkbox"
+						value
+					/>
 				</FormField>
 				<div style={{ borderTop: '1px dashed rgba(0,0,0,0.1)', marginTop: '1em', paddingTop: '1em' }}>
 					{possibleColumns}
@@ -151,12 +157,17 @@ var ListDownloadForm = React.createClass({
 				<Popout isOpen={this.state.isOpen} onCancel={() => this.togglePopout(false)} relativeToID="listHeaderDownloadButton">
 					<Popout.Header title="Baixar" />
 					<Popout.Body scrollable>
-						<Form type="horizontal" component="div">
+						<Form layout="horizontal" labelWidth={100} component="div">
 							<FormField label="Formato do arquivo:">
-								<SegmentedControl equalWidthSegments options={FORMAT_OPTIONS} value={this.state.format} onChange={this.changeFormat} />
+								<SegmentedControl
+									equalWidthSegments
+									onChange={this.changeFormat}
+									options={FORMAT_OPTIONS}
+									value={this.state.format}
+								/>
 							</FormField>
-							<FormField label="Colunas:">
-								<Checkbox autoFocus label="Utilizar selecionadas" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
+(??)							<FormField label="Columns:">
+(??)								<Checkbox autoFocus label="Use currently selected" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
 							</FormField>
 							{this.renderColumnSelect()}
 						</Form>

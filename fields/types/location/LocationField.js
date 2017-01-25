@@ -1,9 +1,16 @@
 import _ from 'lodash';
 import React from 'react';
 import Field from '../Field';
-import { Checkbox, FormField, FormInput, FormNote, FormRow } from 'elemental';
 import CollapsedFieldLabel from '../../components/CollapsedFieldLabel';
 import NestedFormField from '../../components/NestedFormField';
+
+import {
+	FormField,
+	FormInput,
+	FormNote,
+	Grid,
+	LabelledControl,
+} from '../../../admin/client/App/elemental';
 
 /**
  * TODO:
@@ -97,7 +104,7 @@ module.exports = Field.create({
 	},
 
 	renderValue () {
-		return <FormInput noedit>{this.formatValue() || '(sem valor)'}</FormInput>;
+		return <FormInput noedit>{this.formatValue() || ''}</FormInput>;
 	},
 
 	renderField (fieldPath, label, collapse, autoFocus) {
@@ -107,7 +114,13 @@ module.exports = Field.create({
 		const { value = {}, path } = this.props;
 		return (
 			<NestedFormField label={label} data-field-location-path={path + '.' + fieldPath}>
-				<FormInput autoFocus={autoFocus} name={this.getInputName(path + '.' + fieldPath)} value={value[fieldPath]} onChange={this.makeChanger(fieldPath)} placeholder={label} />
+				<FormInput
+					autoFocus={autoFocus}
+					name={this.getInputName(path + '.' + fieldPath)}
+					onChange={this.makeChanger(fieldPath)}
+					placeholder={label}
+					value={value[fieldPath] || ''}
+				/>
 			</NestedFormField>
 		);
 	},
@@ -116,14 +129,24 @@ module.exports = Field.create({
 		const { value = {}, path } = this.props;
 		return (
 			<NestedFormField label="Cidade / Estado" data-field-location-path={path + '.suburb_state'}>
-				<FormRow>
-					<FormField width="two-thirds" data-field-location-path={path + '.suburb'}>
-						<FormInput name={this.getInputName(path + '.suburb')} value={value.suburb} onChange={this.makeChanger('suburb')} placeholder="Cidade" />
-					</FormField>
-					<FormField width="one-third" data-field-location-path={path + '.state'}>
-						<FormInput name={this.getInputName(path + '.state')} value={value.state} onChange={this.makeChanger('state')} placeholder="Estado" />
-					</FormField>
-				</FormRow>
+				<Grid.Row gutter={10}>
+					<Grid.Col small="two-thirds" data-field-location-path={path + '.suburb'}>
+						<FormInput
+							name={this.getInputName(path + '.suburb')}
+							onChange={this.makeChanger('suburb')}
+							placeholder="Cidade"
+							value={value.suburb || ''}
+						/>
+					</Grid.Col>
+					<Grid.Col small="one-third" data-field-location-path={path + '.state'}>
+						<FormInput
+							name={this.getInputName(path + '.state')}
+							onChange={this.makeChanger('state')}
+							placeholder="Estado"
+							value={value.state || ''}
+						/>
+					</Grid.Col>
+				</Grid.Row>
 			</NestedFormField>
 		);
 	},
@@ -132,14 +155,24 @@ module.exports = Field.create({
 		const { value = {}, path } = this.props;
 		return (
 			<NestedFormField label="CEP / País" data-field-location-path={path + '.postcode_country'}>
-				<FormRow>
-					<FormField width="one-third" data-field-location-path={path + '.postcode'}>
-						<FormInput name={this.getInputName(path + '.postcode')} value={value.postcode} onChange={this.makeChanger('postcode')} placeholder="CEP" />
-					</FormField>
-					<FormField width="two-thirds" data-field-location-path={path + '.country'}>
-						<FormInput name={this.getInputName(path + '.country')} value={value.country} onChange={this.makeChanger('country')} placeholder="País" />
-					</FormField>
-				</FormRow>
+				<Grid.Row gutter={10}>
+					<Grid.Col small="one-third" data-field-location-path={path + '.postcode'}>
+						<FormInput
+							name={this.getInputName(path + '.postcode')}
+							onChange={this.makeChanger('postcode')}
+							placeholder="CEP"
+							value={value.postcode || ''}
+						/>
+					</Grid.Col>
+					<Grid.Col small="two-thirds" data-field-location-path={path + '.country'}>
+						<FormInput
+							name={this.getInputName(path + '.country')}
+							onChange={this.makeChanger('country')}
+							placeholder="País"
+							value={value.country || ''}
+						/>
+					</Grid.Col>
+				</Grid.Row>
 			</NestedFormField>
 		);
 	},
@@ -152,14 +185,24 @@ module.exports = Field.create({
 		const geo = value.geo || [];
 		return (
 			<NestedFormField label="Lat / Lng" data-field-location-path={path + '.geo'}>
-				<FormRow>
-					<FormField width="one-half" data-field-location-path="latitude">
-						<FormInput name={this.getInputName(paths.geo + '[1]')} value={geo[1]} onChange={this.makeGeoChanger(1)} placeholder="Latitude" />
-					</FormField>
-					<FormField width="one-half" data-field-location-path="longitude">
-						<FormInput name={this.getInputName(paths.geo + '[0]')} value={geo[0]} onChange={this.makeGeoChanger(0)} placeholder="Longitude" />
-					</FormField>
-				</FormRow>
+				<Grid.Row gutter={10}>
+					<Grid.Col small="one-half" data-field-location-path="latitude">
+						<FormInput
+							name={this.getInputName(paths.geo + '[1]')}
+							onChange={this.makeGeoChanger(1)}
+							placeholder="Latitude"
+							value={geo[1] || ''}
+						/>
+					</Grid.Col>
+					<Grid.Col small="one-half" data-field-location-path="longitude">
+						<FormInput
+							name={this.getInputName(paths.geo + '[0]')}
+							onChange={this.makeGeoChanger(0)}
+							placeholder="Longitude"
+							value={geo[0] || ''}
+						/>
+					</Grid.Col>
+				</Grid.Row>
 			</NestedFormField>
 		);
 	},
@@ -179,20 +222,24 @@ module.exports = Field.create({
 		const { paths, enableMapsAPI } = this.props;
 		if (!enableMapsAPI) return null;
 		var replace = this.state.improve ? (
-			<Checkbox
+			<LabelledControl
+				checked={this.state.overwrite}
 				label="Substituir dados existentes"
 				name={this.getInputName(paths.overwrite)}
 				onChange={this.makeGoogler('overwrite')}
-				checked={this.state.overwrite} />
+				type="checkbox"
+			/>
 		) : null;
 		return (
 			<FormField offsetAbsentLabel>
-				<Checkbox
+				<LabelledControl
+					checked={this.state.improve}
 					label="Auto-detectar e melhorar localização ao salvar"
 					name={this.getInputName(paths.improve)}
 					onChange={this.makeGoogler('improve')}
-					checked={this.state.improve}
-					title="Quando marcado, isso fará com que os campos vazios sejam preenchidos automaticamente." />
+					title="Quando marcado, isso fará com que os campos vazios sejam preenchidos automaticamente."
+					type="checkbox"
+				/>
 				{replace}
 			</FormField>
 		);
@@ -225,7 +272,7 @@ module.exports = Field.create({
 		const { label, path } = this.props;
 		return (
 			<div data-field-name={path} data-field-type="location">
-				<FormField label={label}>
+				<FormField label={label} htmlFor={path}>
 					{showMore}
 				</FormField>
 				{this.renderField('number', 'PO Box / Shop', true, true)}
