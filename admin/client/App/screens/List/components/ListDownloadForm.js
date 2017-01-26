@@ -170,7 +170,7 @@ var ListDownloadForm = React.createClass({
 								<LabelledControl
 									autoFocus
 									checked={useCurrentColumns}
-									label="Use currently selected"
+									label="Usar Selecionados"
 									onChange={this.toggleCurrentlySelectedColumns}
 									type="checkbox"
 									value
